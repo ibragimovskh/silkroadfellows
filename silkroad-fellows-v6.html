@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silkroad Fellows — Spend the summer building in Silicon Valley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4EFE3;
+    --bg-elevated: #FAF6EC;
+    --ink: #1A1F1B;
+    --ink-muted: #6B6F6C;
+    --accent: #14532D;
+    --accent-hover: #0F3D22;
+    --border: rgba(20, 31, 27, 0.12);
+    --border-strong: rgba(20, 31, 27, 0.2);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Instrument Sans', system-ui, sans-serif;
+    --max-width: 1120px;
+    --section-padding: 120px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- Navigation ---------- */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(244, 239, 227, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid var(--bg);
+    border-radius: 50%;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 0.6; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-large {
+    padding: 18px 36px;
+    font-size: 17px;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links a:not(.btn) { display: none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 120px 0 80px;
+    text-align: center;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(44px, 7vw, 88px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin-bottom: 28px;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+
+  .hero-sub {
+    font-size: 20px;
+    color: var(--ink-muted);
+    max-width: 620px;
+    margin: 0 auto 48px;
+    line-height: 1.5;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-cta-meta {
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  /* ---------- Photo grid ---------- */
+  .photo-band {
+    padding: 40px 0 80px;
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .photo-tile {
+    aspect-ratio: 4/5;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-muted);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .photo-tile:hover { transform: translateY(-4px); }
+
+  .photo-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.95);
+  }
+
+  .photo-caption {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .photo-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- Section base ---------- */
+  section { padding: var(--section-padding) 0; }
+
+  @media (max-width: 768px) {
+    section { padding: 80px 0; }
+  }
+
+  .section-eyebrow {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    max-width: 720px;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+
+  /* ---------- About (with embedded benefits) ---------- */
+  .about {
+    border-top: 1px solid var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-grid p {
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .about-grid p + p { margin-top: 20px; }
+
+  .about-benefits {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .about-benefits-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .about-benefits-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 32px;
+  }
+
+  .about-benefits-list li {
+    font-size: 17px;
+    color: var(--ink);
+    padding-left: 24px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .about-benefits-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .about-image {
+    margin-top: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 21/9;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+  }
+
+  .about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .about-benefits-list { grid-template-columns: 1fr; }
+    .about-image { margin-top: 48px; aspect-ratio: 4/3; }
+  }
+
+  /* ---------- How it works (branching roadmap) ---------- */
+  .how {
+    border-top: 1px solid var(--border);
+  }
+
+  .how-header {
+    margin-bottom: 64px;
+  }
+
+  .roadmap {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .roadmap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Mobile fallback for roadmap */
+  .roadmap-mobile {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .roadmap svg { display: none; }
+    .roadmap-mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .roadmap-node {
+      padding: 24px 28px;
+      border-radius: 20px;
+      border: 1.5px solid var(--accent);
+      background: var(--bg);
+      text-align: center;
+    }
+    .roadmap-node.filled {
+      background: var(--accent);
+      color: #fff;
+    }
+    .roadmap-node-label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .roadmap-node.filled .roadmap-node-label {
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .roadmap-node-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .roadmap-node-desc {
+      font-size: 14px;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+    .roadmap-node.filled .roadmap-node-desc {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .roadmap-connector {
+      width: 2px;
+      height: 24px;
+      background: var(--accent);
+      opacity: 0.4;
+      margin: 0 auto;
+    }
+  }
+
+  /* ---------- Track record ---------- */
+  .track {
+    border-top: 1px solid var(--border);
+  }
+
+  .track-header {
+    margin-bottom: 64px;
+  }
+
+  .track-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .track-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 56px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .track-card-tag {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    display: block;
+    line-height: 1.2;
+  }
+
+  .track-card-sub {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    font-weight: 500;
+    display: block;
+  }
+
+  .track-card h3 {
+    margin-bottom: 16px;
+  }
+
+  .track-card-desc {
+    color: var(--ink-muted);
+    font-size: 18px;
+    line-height: 1.55;
+    margin-bottom: 40px;
+    flex-grow: 1;
+    max-width: 720px;
+  }
+
+  .track-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .track-stat-value {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .track-stat-label {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.3;
+  }
+
+  .track-meta {
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  .track-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+  }
+
+  .track-image {
+    aspect-ratio: 4/3;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .track-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .track-image:hover img {
+    transform: scale(1.04);
+  }
+
+  @media (max-width: 768px) {
+    .track-grid { grid-template-columns: 1fr; }
+    .track-card { padding: 36px 28px; }
+    .track-card-tag { font-size: 26px; }
+    .track-stats { gap: 12px; }
+    .track-stat-value { font-size: 26px; }
+  }
+
+  /* ---------- Team ---------- */
+  .team {
+    border-top: 1px solid var(--border);
+  }
+
+  .team-header {
+    margin-bottom: 56px;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 840px;
+  }
+
+  .team-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .team-photo {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-muted);
+    font-family: var(--serif);
+    font-size: 36px;
+    font-style: italic;
+  }
+
+  .team-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .team-name {
+    font-family: var(--serif);
+    font-size: 20px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .team-role {
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 768px) {
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline {
+    border-top: 1px solid var(--border);
+  }
+
+  .timeline-header {
+    margin-bottom: 64px;
+  }
+
+  .timeline-list {
+    list-style: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    gap: 32px;
+    align-items: baseline;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline-date {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .timeline-event {
+    font-size: 18px;
+    color: var(--ink);
+  }
+
+  .timeline-status {
+    font-size: 12px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 768px) {
+    .timeline-item { grid-template-columns: 1fr; gap: 6px; }
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-header {
+    margin-bottom: 56px;
+  }
+
+  .faq-list {
+    border-top: 1px solid var(--border);
+  }
+
+  details {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary::after {
+    content: '+';
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--accent);
+    font-weight: 300;
+    transition: transform 0.3s;
+    line-height: 1;
+  }
+
+  details[open] summary::after { transform: rotate(45deg); }
+  details[open] summary { color: var(--accent); }
+
+  details p {
+    margin-top: 16px;
+    color: var(--ink-muted);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 720px;
+  }
+
+  /* ---------- Final CTA ---------- */
+  .final-cta {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 140px 0;
+  }
+
+  .final-cta h2 {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 32px;
+  }
+
+  .final-cta p {
+    font-size: 18px;
+    color: var(--ink-muted);
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 0;
+    background: var(--bg);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-meta {
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-links a {
+    font-size: 14px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark"></span>
+      Silkroad Fellows
+    </a>
+    <div class="nav-links">
+      <a href="#program">Program</a>
+      <a href="#how">How it works</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://forms.gle/rtnETR8qXZnvvhkp7" class="btn" style="color:white">Apply</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>Spend the summer<br>building in <em>Silicon Valley.</em></h1>
+    <p class="hero-sub">A summer fellowship for university students in the US who want to build their own startup — or work on projects within Silkroad Innovation Hub — in the heart of the Bay Area.</p>
+    <div class="hero-cta">
+      <a href="https://forms.gle/rtnETR8qXZnvvhkp7" class="btn btn-large">Apply for Summer 2026</a>
+      <span class="hero-cta-meta">Applications open · Deadline June 1, 2026</span>
+    </div>
+  </div>
+</header>
+
+<section class="photo-band">
+  <div class="container">
+    <div class="photo-grid">
+      <div class="photo-tile"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEakZkuYXYw3XLWc2efMxzN7T51Q4SaZkIUyDB" alt="Silkroad Fellows scene 1"></div>
+      <div class="photo-tile"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEuFi0Dl3c4BVt5YCq0x6wTXfHeDapEIQJjAPR" alt="Silkroad Fellows scene 2"></div>
+      <div class="photo-tile"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEbXO2qVtEVJlK18wRfGQxvcZ0X6mrUbzjA7Bs" alt="Silkroad Fellows scene 3"></div>
+      <div class="photo-tile"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEW5zj40Qx3ny7kJ4wRfb1vAVrTxHM5gWYNtie" alt="Silkroad Fellows scene 4"></div>
+    </div>
+    <p class="photo-caption">Scenes from past Silkroad Innovation Hub programs.</p>
+  </div>
+</section>
+
+<section class="about" id="program">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <span class="section-eyebrow">The program</span>
+        <h2>What is Silkroad Fellows?</h2>
+      </div>
+      <div>
+        <p>Silkroad Fellows brings a small group of university students to Silicon Valley each summer to build something real. You can spend the summer working on your own startup with our support, or work on projects within Silkroad Innovation Hub. Either way, you walk out with mentorship, a network, and experience most students spend years trying to build.</p>
+        <p>Run by Silkroad Innovation Hub, a five-minute bike ride from Stanford and Sand Hill Road. Accepted fellows pay nothing.</p>
+
+        <div class="about-benefits">
+          <span class="about-benefits-label">What's covered</span>
+          <ul class="about-benefits-list">
+            <li>Housing</li>
+            <li>Mentorship</li>
+            <li>Lunch</li>
+            <li>Travel</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-image">
+      <img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEhQlvNjRfxnmPlT5HutbeD6fpgUs8od7jZBqA" alt="Silkroad Fellows in Silicon Valley">
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="container">
+    <div class="how-header">
+      <span class="section-eyebrow">How it works</span>
+      <h2>One summer.<br>Two paths to build.</h2>
+    </div>
+
+    <div class="roadmap">
+      <!-- Desktop: SVG branching diagram -->
+      <svg viewBox="0 0 1100 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Program roadmap: Phase 01 Land and onboard branches into Path A Build your own startup or Path B Ship with a partner team, both converging into Phase 03 Demo and wrap">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,7 L10,3.5 z" fill="#14532D" fill-opacity="0.45" />
+          </marker>
+        </defs>
+
+        <!-- Curves from Phase 01 (split into Path A / Path B) -->
+        <path d="M 290 225 C 360 225, 380 130, 440 130" stroke="#14532D" stroke-opacity="0.45" fill="none" stroke-width="1.5" marker-end="url(#arrow)" />
+        <path d="M 290 275 C 360 275, 380 390, 440 390" stroke="#14532D" stroke-opacity="0.45" fill="none" stroke-width="1.5" marker-end="url(#arrow)" />
+
+        <!-- Curves from Path A / Path B into Phase 03 -->
+        <path d="M 720 130 C 780 130, 790 225, 840 225" stroke="#14532D" stroke-opacity="0.45" fill="none" stroke-width="1.5" marker-end="url(#arrow)" />
+        <path d="M 720 390 C 780 390, 790 275, 840 275" stroke="#14532D" stroke-opacity="0.45" fill="none" stroke-width="1.5" marker-end="url(#arrow)" />
+
+        <!-- Phase 01: filled green pill -->
+        <rect x="90" y="195" width="200" height="110" rx="55" fill="#14532D" />
+        <text x="190" y="233" text-anchor="middle" fill="rgba(255,255,255,0.72)" font-family="Instrument Sans" font-size="11" font-weight="500" letter-spacing="1.8">PHASE 01</text>
+        <text x="190" y="269" text-anchor="middle" fill="#FFFFFF" font-family="Fraunces" font-size="22" font-weight="500">Land &amp; onboard</text>
+
+        <!-- Phase 01 description -->
+        <text x="190" y="360" text-anchor="middle" fill="#6B6F6C" font-family="Instrument Sans" font-size="14">Move into housing.</text>
+        <text x="190" y="382" text-anchor="middle" fill="#6B6F6C" font-family="Instrument Sans" font-size="14">Meet the cohort.</text>
+
+        <!-- Path A: outlined pill -->
+        <rect x="440" y="80" width="280" height="100" rx="50" fill="#F4EFE3" stroke="#14532D" stroke-width="1.5" />
+        <text x="580" y="118" text-anchor="middle" fill="#14532D" font-family="Instrument Sans" font-size="11" font-weight="500" letter-spacing="1.8">PATH A</text>
+        <text x="580" y="152" text-anchor="middle" fill="#1A1F1B" font-family="Fraunces" font-size="22" font-weight="500">Build your own startup</text>
+
+        <!-- Path A description -->
+        <text x="580" y="210" text-anchor="middle" fill="#6B6F6C" font-family="Instrument Sans" font-size="14">Mentorship, workspace, peers.</text>
+
+        <!-- Path B: outlined pill -->
+        <rect x="440" y="340" width="280" height="100" rx="50" fill="#F4EFE3" stroke="#14532D" stroke-width="1.5" />
+        <text x="580" y="378" text-anchor="middle" fill="#14532D" font-family="Instrument Sans" font-size="11" font-weight="500" letter-spacing="1.8">PATH B</text>
+        <text x="580" y="412" text-anchor="middle" fill="#1A1F1B" font-family="Fraunces" font-size="22" font-weight="500">Work on Silkroad projects</text>
+
+        <!-- Path B description -->
+        <text x="580" y="470" text-anchor="middle" fill="#6B6F6C" font-family="Instrument Sans" font-size="14">Contribute to what we're building.</text>
+
+        <!-- Phase 03: filled green pill -->
+        <rect x="840" y="195" width="200" height="110" rx="55" fill="#14532D" />
+        <text x="940" y="233" text-anchor="middle" fill="rgba(255,255,255,0.72)" font-family="Instrument Sans" font-size="11" font-weight="500" letter-spacing="1.8">PHASE 03</text>
+        <text x="940" y="269" text-anchor="middle" fill="#FFFFFF" font-family="Fraunces" font-size="22" font-weight="500">Demo &amp; wrap</text>
+
+        <!-- Phase 03 description -->
+        <text x="940" y="355" text-anchor="middle" fill="#6B6F6C" font-family="Instrument Sans" font-size="14">Demo day. Network.</text>
+        <text x="940" y="377" text-anchor="middle" fill="#6B6F6C" font-family="Instrument Sans" font-size="14">Recommendation letter.</text>
+      </svg>
+
+      <!-- Mobile: stacked fallback -->
+      <div class="roadmap-mobile">
+        <div class="roadmap-node filled">
+          <span class="roadmap-node-label">Phase 01</span>
+          <div class="roadmap-node-title">Land &amp; onboard</div>
+          <div class="roadmap-node-desc">Move into housing. Meet the cohort.</div>
+        </div>
+        <div class="roadmap-connector"></div>
+        <div class="roadmap-node">
+          <span class="roadmap-node-label">Path A</span>
+          <div class="roadmap-node-title">Build your own startup</div>
+          <div class="roadmap-node-desc">Mentorship, workspace, peers.</div>
+        </div>
+        <div class="roadmap-node">
+          <span class="roadmap-node-label">Path B</span>
+          <div class="roadmap-node-title">Work on Silkroad projects</div>
+          <div class="roadmap-node-desc">Contribute to what we're building.</div>
+        </div>
+        <div class="roadmap-connector"></div>
+        <div class="roadmap-node filled">
+          <span class="roadmap-node-label">Phase 03</span>
+          <div class="roadmap-node-title">Demo &amp; wrap</div>
+          <div class="roadmap-node-desc">Demo day. Network. Recommendation letter.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="track">
+  <div class="container">
+    <div class="track-header">
+      <span class="section-eyebrow">Track record</span>
+      <h2>We've done this before.</h2>
+    </div>
+
+    <div class="track-grid">
+      <div class="track-card">
+        <span class="track-card-tag">AlchemistX and Silicon Valley Residency</span>
+        <p class="track-card-desc">In partnership with Alchemist Accelerator, we ran two cohorts of B2B startups from Central Eurasia through Silicon Valley — four months on the ground, workshops every week, mentor sessions, and introductions to US partners.</p>
+        <div class="track-images">
+          <div class="track-image"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEDuE6y30mVnajvXTgRDKPY2rLzs43Sm1ZyfG9" alt="AlchemistX cohort scene 1"></div>
+          <div class="track-image"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEjGcBn5jWhzRqj5bWlaLNvOkAr083HyxXmnGw" alt="AlchemistX cohort scene 2"></div>
+          <div class="track-image"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEXOP9t9jbbfQLCqxnBT1wzRSaD3hyrFZ5EXMk" alt="AlchemistX cohort scene 3"></div>
+        </div>
+      </div>
+
+      <div class="track-card">
+        <span class="track-card-tag">Summer program for high school students</span>
+        <p class="track-card-desc">Before Silkroad Fellows, we ran a summer program for high school students — bringing them to the Bay Area, connecting them with founders and universities, and giving them their first taste of how Silicon Valley actually works.</p>
+        <div class="track-images">
+          <div class="track-image"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEEX8ocE2Fqxb8td69QU0NRBD3yT1PJoYzC4XO" alt="Summer program scene 1"></div>
+          <div class="track-image"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDElJ2NAMIgs2k8H4n6bZAKdexXuTECwihprfQJ" alt="Summer program scene 2"></div>
+          <div class="track-image"><img loading="lazy" src="https://utfs.io/f/5lAbzPMR2hDEIaQRrIBRumv1e6NdhzHDWfTJ5bQUt7AB280E" alt="Summer program scene 3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="team">
+  <div class="container">
+    <div class="team-header">
+      <span class="section-eyebrow">The team</span>
+      <h2>Who runs the program.</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo"><img loading="lazy" src="https://media.licdn.com/dms/image/v2/D5603AQHix9qcF-sr2g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1666030681086?e=1778716800&v=beta&t=JsJnX2XDxFG0WNo_N7Ja5KUmu9JsPh9yh7nDA5ihS_o" alt="Asset Abdualiyev"></div>
+        <div class="team-name">Asset Abdualiyev</div>
+        <div class="team-role">Founder &amp; CEO, Silkroad Innovation Hub</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><img loading="lazy" src="https://media.licdn.com/dms/image/v2/C4E03AQF6OS915yw-kQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1621273136053?e=1778716800&v=beta&t=Rs8nj_yrRW1XNmLBiBCR2iGf0cDUnp9gxs-E6KE77ug" alt="Aikumis Seksenbayeva"></div>
+        <div class="team-name">Aikumis Seksenbayeva</div>
+        <div class="team-role">Silkroad Innovation Hub</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><img loading="lazy" src="https://media.licdn.com/dms/image/v2/D4E03AQGaAtx7cdrjdw/profile-displayphoto-scale_400_400/B4EZvM7f4yGoAg-/0/1768669710032?e=1778716800&v=beta&t=k00PdkkegLeJ1ZtmtHcJ7_B2ZjcWTmZeDOvpKZUnvP0" alt="Feruza Mukhammadieva"></div>
+        <div class="team-name">Feruza Mukhammadieva</div>
+        <div class="team-role">Princeton University · Silkroad Innovation Hub</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline" id="timeline">
+  <div class="container">
+    <div class="timeline-header">
+      <span class="section-eyebrow">Key dates</span>
+      <h2>Program timeline</h2>
+    </div>
+    <ul class="timeline-list">
+      <li class="timeline-item">
+        <div class="timeline-date">June 1</div>
+        <div class="timeline-event">Application deadline</div>
+        <div class="timeline-status">Open now</div>
+      </li>
+      <li class="timeline-item">
+        <div class="timeline-date">June 15</div>
+        <div class="timeline-event">Decisions announced</div>
+        <div class="timeline-status">Email</div>
+      </li>
+      <li class="timeline-item">
+        <div class="timeline-date">July</div>
+        <div class="timeline-event">Program begins in the Bay Area</div>
+        <div class="timeline-status">8 weeks</div>
+      </li>
+      <li class="timeline-item">
+        <div class="timeline-date">August</div>
+        <div class="timeline-event">Demo day &amp; closing dinner</div>
+        <div class="timeline-status">Final week</div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <span class="section-eyebrow">Questions</span>
+      <h2>Frequently asked</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>Is the program really free?</summary>
+        <p>Yes. Accepted fellows pay nothing. Housing, lunch, and travel to the Bay Area are covered, and you'll have access to mentors and workspace throughout the program.</p>
+      </details>
+      <details>
+        <summary>Who can apply?</summary>
+        <p>Current university students based in the United States, in any year and any major. We're prioritizing applicants who are already in the US for the summer — we do not cover international travel or sponsor visas.</p>
+      </details>
+      <details>
+        <summary>Do I need a technical background?</summary>
+        <p>No. We've welcomed fellows from engineering, design, product, growth, and operations. What matters more is that you've already built something — a project, a side hustle, a portfolio, a story.</p>
+      </details>
+      <details>
+        <summary>What does a typical week look like?</summary>
+        <p>Mornings on your project. Afternoons with mentors and workshops. Evenings with the cohort. Plus founder talks, demo sessions, and Bay Area field trips throughout.</p>
+      </details>
+      <details>
+        <summary>How competitive is the application?</summary>
+        <p>Selective but not impossible. We read every application carefully and care more about drive and demonstrated initiative than résumés or grades.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container">
+    <h2>Your summer in the Valley<br>starts with one form.</h2>
+    <p>Applications take about 20 minutes. Decisions are rolling, so earlier is better.</p>
+    <a href="https://forms.gle/rtnETR8qXZnvvhkp7" class="btn btn-large">Apply for Summer 2026</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-meta">
+        © 2026 Silkroad Innovation Hub · buildunicorns@silkroadinnovationhub.com
+      </div>
+      <div class="footer-links">
+        <a href="#program">Program</a>
+        <a href="#faq">FAQ</a>
+        <a href="#">Privacy</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
