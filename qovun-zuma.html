@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Qovun Zuma — Silkroad Fellows</title>
+<meta name="description" content="Zuma o'yinining o'zbekcha versiyasi — tarvuz, qovun, anor va uzumlarni uchtadan qatorga tizing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4EFE3;
+    --bg-elevated: #FAF6EC;
+    --ink: #1A1F1B;
+    --ink-muted: #6B6F6C;
+    --accent: #14532D;
+    --accent-hover: #0F3D22;
+    --gold: #C8912A;
+    --border: rgba(20, 31, 27, 0.12);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Instrument Sans', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 40px;
+    overscroll-behavior: none;
+  }
+
+  /* ---------- Page chrome ---------- */
+  .topbar {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .brand {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 26px; height: 26px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid var(--bg);
+    border-radius: 50%;
+  }
+
+  .back-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    aspect-ratio: 3 / 2;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #EDE4D2;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 50px -24px rgba(20, 31, 27, 0.5);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+
+  /* ---------- HUD ---------- */
+  .hud {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hud-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+
+  .panel {
+    background: rgba(250, 246, 236, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 14px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .stat { display: flex; flex-direction: column; line-height: 1.15; }
+  .stat b {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat span {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+
+  .hud-buttons { display: flex; gap: 8px; pointer-events: auto; }
+
+  .icon-btn {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(250, 246, 236, 0.88);
+    backdrop-filter: blur(8px);
+    color: var(--ink);
+    font-size: 16px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .icon-btn:hover { background: #fff; transform: translateY(-1px); }
+
+  /* ---------- Overlays ---------- */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 34, 30, 0.62);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    pointer-events: auto;
+    z-index: 5;
+  }
+  .overlay[hidden] { display: none; }
+
+  .card {
+    background: var(--bg-elevated);
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    padding: 34px 38px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.6);
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card h1 {
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .card h2 {
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .card p { color: var(--ink-muted); font-size: 15px; margin-bottom: 8px; }
+  .card p.lead { color: var(--ink); font-size: 16px; margin-bottom: 22px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 30px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.18s;
+    margin-top: 18px;
+  }
+  .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    margin-left: 8px;
+  }
+  .btn.ghost:hover { background: rgba(20,31,27,0.05); }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    justify-content: center;
+    margin: 18px 0 4px;
+  }
+  .legend div { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-muted); }
+  .swatch { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.22); }
+
+  .keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  kbd {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(20,31,27,0.07);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 7px;
+    color: var(--ink);
+  }
+
+  .foot {
+    max-width: 960px;
+    width: 100%;
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  .rotate-hint { display: none; }
+
+  @media (max-width: 720px) and (orientation: portrait) {
+    .rotate-hint {
+      display: block;
+      width: 100%;
+      max-width: 960px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--ink-muted);
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 12px 10px 28px; }
+    .card { padding: 26px 22px; }
+    .card h1 { font-size: 32px; }
+    .card h2 { font-size: 26px; }
+    .panel { gap: 12px; padding: 6px 10px; }
+    .stat b { font-size: 16px; }
+    .stat span { font-size: 9px; }
+    .hud { padding: 10px; }
+    .icon-btn { width: 32px; height: 32px; font-size: 14px; }
+    .brand { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="index.html"><span class="logo-mark"></span> Silkroad Fellows</a>
+  <a class="back-link" href="index.html">← Bosh sahifa</a>
+</div>
+
+<div class="stage" id="stage">
+  <canvas id="game"></canvas>
+
+  <div class="hud">
+    <div class="hud-row">
+      <div class="panel">
+        <div class="stat"><b id="hud-score">0</b><span>Ochko</span></div>
+        <div class="stat"><b id="hud-level">1</b><span>Bosqich</span></div>
+        <div class="stat"><b id="hud-left">0</b><span>Qolgan</span></div>
+        <div class="stat"><b id="hud-best">0</b><span>Rekord</span></div>
+      </div>
+      <div class="hud-buttons">
+        <button class="icon-btn" id="btn-sound" title="Ovoz (M)">🔊</button>
+        <button class="icon-btn" id="btn-pause" title="Pauza (P)">❚❚</button>
+      </div>
+    </div>
+    <div class="hud-row"><div></div><div></div></div>
+  </div>
+
+  <!-- Start -->
+  <div class="overlay" id="ov-start">
+    <div class="card">
+      <div class="eyebrow">Ipak yo'li bo'ylab</div>
+      <h1>Qovun Zuma</h1>
+      <p class="lead">Bolalikdagi Zuma — endi o'zbekcha. Mevalarni otib, uch yoki undan ko'pini bir xil qatorga tizing va zanjir teshikka yetib borishidan oldin butunlay yo'q qiling.</p>
+      <div class="legend" id="legend"></div>
+      <div class="keys">
+        <span><kbd>Sichqoncha</kbd> nishonga olish</span>
+        <span><kbd>Chap tugma</kbd> otish</span>
+        <span><kbd>Space</kbd> mevani almashtirish</span>
+        <span><kbd>P</kbd> pauza</span>
+        <span><kbd>M</kbd> ovoz</span>
+      </div>
+      <button class="btn" id="btn-start">Boshlash</button>
+    </div>
+  </div>
+
+  <!-- Pause -->
+  <div class="overlay" id="ov-pause" hidden>
+    <div class="card">
+      <div class="eyebrow">To'xtatildi</div>
+      <h2>Pauza</h2>
+      <p class="lead">Choy iching, keyin davom etamiz.</p>
+      <button class="btn" id="btn-resume">Davom etish</button>
+      <button class="btn ghost" id="btn-quit">Boshidan</button>
+    </div>
+  </div>
+
+  <!-- Level clear -->
+  <div class="overlay" id="ov-clear" hidden>
+    <div class="card">
+      <div class="eyebrow">Barakalla!</div>
+      <h2 id="clear-title">Bosqich tugadi</h2>
+      <p class="lead" id="clear-text"></p>
+      <button class="btn" id="btn-next">Keyingi bosqich</button>
+    </div>
+  </div>
+
+  <!-- Game over -->
+  <div class="overlay" id="ov-over" hidden>
+    <div class="card">
+      <div class="eyebrow">Afsus</div>
+      <h2>O'yin tugadi</h2>
+      <p class="lead" id="over-text"></p>
+      <button class="btn" id="btn-again">Yana o'ynash</button>
+    </div>
+  </div>
+</div>
+
+<p class="rotate-hint">Kattaroq maydon uchun telefonni yon tomonga buring.</p>
+
+<div class="foot">
+  <span>Meva zanjiri teshikka yetib borsa — o'yin tugaydi.</span>
+  <span>Tarvuz · Qovun · Anor · Uzum · O'rik · Shaftoli</span>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ============================ Sozlamalar ============================ */
+const W = 960, H = 640;
+const R = 18;                 // meva radiusi
+const SPACING = 34;           // zanjirdagi markazlar orasidagi masofa
+const SHOT_SPEED = 820;       // otilgan meva tezligi (px/s)
+const FEED_SPEED = 88;        // mevalar teshikdan quyilayotgandagi tezlik
+const CATCHUP = 300;          // orqadagi bo'lakning quvib yetish tezligi
+const ROLLBACK_SPEED = 130;   // portlashdan keyin oldingi bo'lakning orqaga siljishi
+const ROLLBACK_TIME = 0.45;
+const COMBO_WINDOW = 2.2;
+
+const FRUITS = [
+  { name: "Tarvuz",   c1: '#6FBE4A', c2: '#2E6B25', dark: '#1E4A18' },
+  { name: "Qovun",    c1: '#F3CB4A', c2: '#B8860B', dark: '#7C5A06' },
+  { name: "Anor",     c1: '#E8465A', c2: '#95121F', dark: '#650B15' },
+  { name: "Uzum",     c1: '#9C6FD1', c2: '#4E2B84', dark: '#341B5C' },
+  { name: "O'rik",    c1: '#FBA53A', c2: '#C25C09', dark: '#8A3E05' },
+  { name: "Shaftoli", c1: '#FB93AC', c2: '#C74468', dark: '#8E2B45' },
+];
+
+const LEVELS = [
+  { name: "Buxoro bozori",    turns: 2.4, r0: 298, r1: 122, dir:  1, start: Math.PI,       colors: 4, count: 44, speed: 15 },
+  { name: "Samarqand",        turns: 2.6, r0: 302, r1: 120, dir: -1, start: 0,             colors: 4, count: 50, speed: 18 },
+  { name: "Xiva",             turns: 2.8, r0: 300, r1: 118, dir:  1, start: Math.PI * 0.5, colors: 5, count: 56, speed: 21 },
+  { name: "Farg'ona vodiysi", turns: 3.0, r0: 302, r1: 118, dir: -1, start: Math.PI * 1.5, colors: 5, count: 62, speed: 24 },
+  { name: "Toshkent",         turns: 3.2, r0: 300, r1: 116, dir:  1, start: Math.PI * 0.25,colors: 6, count: 70, speed: 27 },
+];
+
+/* ============================ Canvas ============================ */
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+/* ============================ Yo'l (spiral) ============================ */
+// Nazorat nuqtalarini yasab, keyin yoy uzunligi bo'yicha 1px qadam bilan qayta namuna olamiz.
+function buildPath(cfg) {
+  const cx = W / 2, cy = H / 2 + 14;
+  const kx = 1.33, ky = 0.88;            // ekran keng — ellips shaklida cho'zamiz
+  const raw = [];
+  const STEPS = 2400;
+  for (let i = 0; i <= STEPS; i++) {
+    const t = -0.07 + (1.07) * (i / STEPS);
+    const ang = cfg.start + cfg.dir * cfg.turns * Math.PI * 2 * t;
+    let r;
+    if (t < 0) r = cfg.r0 + (-t) * 2100;               // ekran tashqarisidan kirish
+    else r = cfg.r0 + (cfg.r1 - cfg.r0) * t + Math.sin(t * cfg.turns * Math.PI * 2 * 1.5) * 10;
+    raw.push({ x: cx + Math.cos(ang) * r * kx, y: cy + Math.sin(ang) * r * ky });
+  }
+  // yoy uzunligi bo'yicha 1px qadam bilan qayta namuna
+  const pts = [raw[0]];
+  let acc = 0;
+  for (let i = 1; i < raw.length; i++) {
+    let px = raw[i-1].x, py = raw[i-1].y;
+    const dx = raw[i].x - px, dy = raw[i].y - py;
+    const seg = Math.hypot(dx, dy);
+    if (seg === 0) continue;
+    let travelled = 0;
+    while (acc + (seg - travelled) >= 1) {
+      const need = 1 - acc;
+      travelled += need;
+      const k = travelled / seg;
+      pts.push({ x: raw[i-1].x + dx * k, y: raw[i-1].y + dy * k });
+      acc = 0;
+    }
+    acc += seg - travelled;
+  }
+  // burchaklar
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[Math.max(0, i - 3)], b = pts[Math.min(pts.length - 1, i + 3)];
+    pts[i].a = Math.atan2(b.y - a.y, b.x - a.x);
+  }
+  // g'or og'zi — yo'lning ekranga kiradigan birinchi nuqtasi
+  let entry = 0;
+  for (let i = 0; i < pts.length; i++) {
+    if (pts[i].x > 14 && pts[i].x < W - 14 && pts[i].y > 14 && pts[i].y < H - 14) { entry = i; break; }
+  }
+  return { pts, len: pts.length - 1, cx, cy, entry };
+}
+
+function posAt(path, d) {
+  const i = Math.max(0, Math.min(path.len, Math.round(d)));
+  return path.pts[i];
+}
+
+/* ============================ Holat ============================ */
+const state = {
+  mode: 'start',        // start | play | pause | clear | over
+  score: 0,
+  best: +(localStorage.getItem('qovunzuma.best') || 0),
+  levelIndex: 0,
+  levelNum: 1,
+  path: null,
+  cfg: null,
+  balls: [],            // {dist, type}  — oldindan orqaga (dist kamayib boradi)
+  remaining: 0,
+  shot: null,           // {x,y,vx,vy,type}
+  current: 0,
+  next: 0,
+  aim: { x: W / 2 + 120, y: H / 2 },
+  shooter: { x: W / 2, y: H / 2 + 8, a: 0, recoil: 0 },
+  rollback: 0,
+  combo: 0,
+  comboTimer: 0,
+  particles: [],
+  popups: [],
+  shake: 0,
+  cooldown: 0,
+  flash: 0,
+};
+
+let sound = true;
+
+/* ============================ Ovoz ============================ */
+let actx = null;
+function beep(freq, dur, type = 'triangle', gain = 0.06, slide = 0) {
+  if (!sound) return;
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, actx.currentTime);
+    if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, freq + slide), actx.currentTime + dur);
+    g.gain.setValueAtTime(gain, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime + dur);
+  } catch (e) { /* ovozsiz davom etamiz */ }
+}
+const sfx = {
+  shoot: () => beep(420, 0.09, 'square', 0.045, -160),
+  hit:   () => beep(240, 0.07, 'sine', 0.05),
+  match: (n) => { for (let i = 0; i < 3; i++) setTimeout(() => beep(520 + i * 130 + n * 60, 0.12, 'triangle', 0.06), i * 55); },
+  swap:  () => beep(660, 0.06, 'sine', 0.04),
+  clear: () => [0,1,2,3].forEach(i => setTimeout(() => beep(440 * Math.pow(1.26, i), 0.18, 'triangle', 0.06), i * 110)),
+  over:  () => [0,1,2].forEach(i => setTimeout(() => beep(320 / (1 + i * 0.28), 0.3, 'sawtooth', 0.05), i * 150)),
+};
+
+/* ============================ Bosqichni tayyorlash ============================ */
+function levelConfig(n) {
+  const base = LEVELS[Math.min(n - 1, LEVELS.length - 1)];
+  const extra = Math.max(0, n - LEVELS.length);       // LEVELS tugagach — cheksiz rejim
+  return {
+    ...base,
+    name: extra > 0 ? base.name + " · " + (extra + 1) : base.name,
+    count: base.count + extra * 6,
+    speed: base.speed + extra * 3,
+    colors: Math.min(6, base.colors + Math.floor(extra / 2)),
+  };
+}
+
+function startLevel(n) {
+  state.levelNum = n;
+  state.cfg = levelConfig(n);
+  state.path = buildPath(state.cfg);
+  state.balls = [];
+  state.remaining = state.cfg.count;
+  state.shot = null;
+  state.rollback = 0;
+  state.combo = 0;
+  state.comboTimer = 0;
+  state.particles.length = 0;
+  state.popups.length = 0;
+  state.cooldown = 0;
+  state.shooter.x = state.path.cx;
+  state.shooter.y = state.path.cy;
+  state.current = randomType();
+  state.next = randomType();
+  state.mode = 'play';
+  updateHud();
+}
+
+function randomType() {
+  return Math.floor(Math.random() * state.cfg.colors);
+}
+
+// Zanjirda mavjud ranglardan tanlaymiz (imkoni bo'lsa) — o'yin adolatli bo'lsin
+function pickShooterType() {
+  if (state.balls.length > 3) {
+    const present = [...new Set(state.balls.map(b => b.type))];
+    return present[Math.floor(Math.random() * present.length)];
+  }
+  return randomType();
+}
+
+/* ============================ Zanjir mantiqi ============================ */
+function segments() {
+  const segs = [];
+  if (!state.balls.length) return segs;
+  let start = 0;
+  for (let i = 1; i < state.balls.length; i++) {
+    if (state.balls[i-1].dist - state.balls[i].dist > SPACING + 1.2) { segs.push([start, i-1]); start = i; }
+  }
+  segs.push([start, state.balls.length - 1]);
+  return segs;
+}
+
+function updateChain(dt) {
+  const balls = state.balls;
+
+  // yangi mevalar teshikdan chiqadi
+  if (state.remaining > 0) {
+    const last = balls[balls.length - 1];
+    if (!last || last.dist >= SPACING) {
+      // fresh = teshikdan yangi chiqqan meva; u zanjirga qo'shilganda o'z-o'zidan portlamaydi
+      balls.push({ dist: 0, type: randomType(), pop: 0, fresh: true });
+      state.remaining--;
+      updateHud();
+    }
+  }
+
+  if (!balls.length) return;
+
+  const segs = segments();
+  const touched = [];
+
+  for (let s = 0; s < segs.length; s++) {
+    const [a, b] = segs[s];
+    let move;
+    if (s === 0) {
+      // mevalar hali quyilayotgan bo'lsa, zanjir tezroq suriladi
+      const push = state.remaining > 0 ? FEED_SPEED : state.cfg.speed;
+      move = state.rollback > 0 ? -ROLLBACK_SPEED * dt : push * dt;
+      if (move < 0 && segs.length > 1) {
+        const nextFront = balls[segs[1][0]].dist;
+        const minMove = (nextFront + SPACING) - balls[b].dist;   // manfiy qiymat
+        if (move < minMove) { move = Math.min(0, minMove); touched.push(segs[1]); }
+      }
+    } else {
+      move = CATCHUP * dt;
+      const frontBack = balls[segs[s-1][1]].dist;
+      const maxMove = (frontBack - SPACING) - balls[a].dist;
+      if (move >= maxMove) { move = Math.max(0, maxMove); touched.push([a, b]); }
+    }
+    for (let i = a; i <= b; i++) balls[i].dist += move;
+  }
+
+  // Bo'laklar qo'shilgan joyni tekshiramiz. Endigina teshikdan chiqqan mevalar
+  // birikkanda portlamaydi — faqat o'yinchi yo'q qilgan bo'shliq yopilganda kombo bo'ladi.
+  for (const [a, b] of touched) {
+    const joint = balls[a];
+    if (!joint) continue;
+    const wasFresh = joint.fresh;
+    for (let i = a; i <= b && i < balls.length; i++) balls[i].fresh = false;
+    if (!wasFresh) {
+      const idx = balls.indexOf(joint);
+      if (idx >= 0) checkMatch(idx);
+    }
+  }
+
+  // teshikka yetib bordimi?
+  if (state.balls.length && state.balls[0].dist >= state.path.len) gameOver();
+}
+
+function checkMatch(index) {
+  const balls = state.balls;
+  if (index < 0 || index >= balls.length) return false;
+  const t = balls[index].type;
+  let a = index, b = index;
+  while (a - 1 >= 0 && balls[a-1].type === t && balls[a-1].dist - balls[a].dist <= SPACING + 2) a--;
+  while (b + 1 < balls.length && balls[b+1].type === t && balls[b].dist - balls[b+1].dist <= SPACING + 2) b++;
+  const n = b - a + 1;
+  if (n < 3) return false;
+
+  state.combo++;
+  state.comboTimer = COMBO_WINDOW;
+  const mult = Math.min(1 + (state.combo - 1) * 0.5, 5);
+  const gained = Math.round(n * 10 * mult);
+  state.score += gained;
+
+  let mx = 0, my = 0;
+  for (let i = a; i <= b; i++) {
+    const p = posAt(state.path, balls[i].dist);
+    mx += p.x; my += p.y;
+    burst(p.x, p.y, balls[i].type);
+  }
+  mx /= n; my /= n;
+
+  const label = state.combo > 1 ? `+${gained}  ×${mult.toFixed(1)}` : `+${gained}`;
+  state.popups.push({ x: mx, y: my, text: label, life: 1.1, big: state.combo > 1 });
+  if (state.combo > 1) state.popups.push({ x: mx, y: my - 26, text: comboWord(state.combo), life: 1.3, big: true });
+
+  const hadFront = a > 0;
+  balls.splice(a, n);
+  if (hadFront && a < balls.length) state.rollback = ROLLBACK_TIME;
+
+  state.shake = Math.min(14, 6 + n);
+  state.flash = 0.25;
+  sfx.match(state.combo);
+  updateHud();
+
+  // to'g'ridan-to'g'ri tegib turgan bo'lsa, zanjir davom etsin
+  if (a > 0 && a < balls.length && balls[a-1].dist - balls[a].dist <= SPACING + 2) checkMatch(a);
+  return true;
+}
+
+function comboWord(c) {
+  const words = ["", "Zo'r!", "Barakalla!", "Ajoyib!", "Qoyil!", "Bo'ldi bu!"];
+  return words[Math.min(c - 1, words.length - 1)] || "Qoyil!";
+}
+
+/* ============================ Otish ============================ */
+function shoot() {
+  if (state.mode !== 'play' || state.shot || state.cooldown > 0) return;
+  const sx = state.shooter.x, sy = state.shooter.y;
+  const a = Math.atan2(state.aim.y - sy, state.aim.x - sx);
+  state.shot = {
+    x: sx + Math.cos(a) * 26,
+    y: sy + Math.sin(a) * 26,
+    vx: Math.cos(a) * SHOT_SPEED,
+    vy: Math.sin(a) * SHOT_SPEED,
+    type: state.current,
+  };
+  state.current = state.next;
+  state.next = pickShooterType();
+  state.shooter.recoil = 1;
+  state.cooldown = 0.12;
+  sfx.shoot();
+}
+
+function swapBalls() {
+  if (state.mode !== 'play') return;
+  const t = state.current; state.current = state.next; state.next = t;
+  sfx.swap();
+}
+
+function updateShot(dt) {
+  if (state.cooldown > 0) state.cooldown -= dt;
+  const s = state.shot;
+  if (!s) return;
+
+  const steps = Math.max(1, Math.ceil((SHOT_SPEED * dt) / 6));
+  const sdt = dt / steps;
+  for (let k = 0; k < steps; k++) {
+    s.x += s.vx * sdt;
+    s.y += s.vy * sdt;
+
+    // nishonga tegmasa — meva ekrandan chiqib ketadi
+    if (s.x < -R * 2 || s.x > W + R * 2 || s.y < -R * 2 || s.y > H + R * 2) {
+      state.shot = null;
+      return;
+    }
+
+    // zanjir bilan to'qnashuv
+    const balls = state.balls;
+    let hit = -1, bestD = Infinity;
+    for (let i = 0; i < balls.length; i++) {
+      const p = posAt(state.path, balls[i].dist);
+      const d = (p.x - s.x) * (p.x - s.x) + (p.y - s.y) * (p.y - s.y);
+      if (d < (R * 2) * (R * 2) && d < bestD) { bestD = d; hit = i; }
+    }
+    if (hit >= 0) { insertShot(hit, s); state.shot = null; return; }
+  }
+}
+
+function insertShot(i, s) {
+  const balls = state.balls;
+  const p = posAt(state.path, balls[i].dist);
+  const dir = p.a;
+  const ahead = (s.x - p.x) * Math.cos(dir) + (s.y - p.y) * Math.sin(dir) > 0;
+  const idx = ahead ? i : i + 1;
+
+  let dist;
+  if (idx === 0) dist = balls[0].dist + SPACING;
+  else dist = balls[idx - 1].dist - SPACING;
+
+  balls.splice(idx, 0, { dist, type: s.type, pop: 1 });
+
+  // orqadagilarni surib qo'yamiz
+  for (let j = idx + 1; j < balls.length; j++) {
+    if (balls[j].dist > balls[j-1].dist - SPACING) balls[j].dist = balls[j-1].dist - SPACING;
+  }
+
+  state.combo = 0;
+  sfx.hit();
+  checkMatch(idx);
+  state.shake = Math.max(state.shake, 3);
+}
+
+/* ============================ Effektlar ============================ */
+function burst(x, y, type) {
+  const f = FRUITS[type];
+  for (let i = 0; i < 12; i++) {
+    const a = Math.random() * Math.PI * 2, sp = 60 + Math.random() * 200;
+    state.particles.push({
+      x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 40,
+      life: 0.5 + Math.random() * 0.5, max: 1,
+      r: 2 + Math.random() * 4,
+      c: Math.random() < 0.5 ? f.c1 : f.c2,
+    });
+  }
+}
+
+function updateFx(dt) {
+  for (let i = state.particles.length - 1; i >= 0; i--) {
+    const p = state.particles[i];
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    p.vy += 520 * dt; p.vx *= 0.98;
+    p.life -= dt;
+    if (p.life <= 0) state.particles.splice(i, 1);
+  }
+  for (let i = state.popups.length - 1; i >= 0; i--) {
+    const q = state.popups[i];
+    q.y -= 32 * dt; q.life -= dt;
+    if (q.life <= 0) state.popups.splice(i, 1);
+  }
+  if (state.shake > 0) state.shake = Math.max(0, state.shake - 40 * dt);
+  if (state.flash > 0) state.flash = Math.max(0, state.flash - dt * 1.6);
+  if (state.rollback > 0) state.rollback -= dt;
+  if (state.comboTimer > 0) { state.comboTimer -= dt; if (state.comboTimer <= 0) state.combo = 0; }
+  for (const b of state.balls) if (b.pop > 0) b.pop = Math.max(0, b.pop - dt * 4);
+  if (state.shooter.recoil > 0) state.shooter.recoil = Math.max(0, state.shooter.recoil - dt * 5);
+}
+
+/* ============================ Chizish ============================ */
+// Fon naqshini bir marta tayyorlab olamiz (suzani uslubidagi ornament)
+const bg = document.createElement('canvas');
+bg.width = W; bg.height = H;
+(function paintBg() {
+  const g = bg.getContext('2d');
+  g.fillStyle = '#F4EFE3';
+  g.fillRect(0, 0, W, H);
+  const cx = W / 2, cy = H / 2 + 14;
+
+  // ipak yo'lidagi kunbotar — yumshoq radial nur
+  const rg = g.createRadialGradient(cx, cy, 40, cx, cy, 620);
+  rg.addColorStop(0, 'rgba(255,255,255,0.75)');
+  rg.addColorStop(1, 'rgba(214,199,168,0.55)');
+  g.fillStyle = rg;
+  g.fillRect(0, 0, W, H);
+
+  // konsentrik naqsh halqalari
+  g.strokeStyle = 'rgba(20,83,45,0.09)';
+  for (let r = 70; r < 620; r += 46) {
+    g.beginPath();
+    g.lineWidth = r % 92 === 0 ? 2 : 1;
+    g.ellipse(cx, cy, r * 1.33, r * 0.88, 0, 0, Math.PI * 2);
+    g.stroke();
+  }
+
+  // suzani gullari
+  g.save();
+  for (let i = 0; i < 26; i++) {
+    const a = (i / 26) * Math.PI * 2;
+    const rr = 250 + (i % 3) * 120;
+    const x = cx + Math.cos(a) * rr * 1.33, y = cy + Math.sin(a) * rr * 0.88;
+    g.fillStyle = i % 2 ? 'rgba(200,145,42,0.16)' : 'rgba(20,83,45,0.11)';
+    g.beginPath();
+    for (let k = 0; k < 8; k++) {
+      const pa = a + (k / 8) * Math.PI * 2;
+      g.ellipse(x + Math.cos(pa) * 9, y + Math.sin(pa) * 9, 6, 3, pa, 0, Math.PI * 2);
+    }
+    g.fill();
+  }
+  g.restore();
+})();
+
+function drawTrack(path) {
+  const pts = path.pts;
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  const trace = (w, color) => {
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 6; i < pts.length; i += 6) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
+    ctx.lineWidth = w; ctx.strokeStyle = color; ctx.stroke();
+  };
+
+  trace(R * 2 + 13, 'rgba(20,31,27,0.16)');
+  trace(R * 2 + 5, 'rgba(20,83,45,0.30)');
+  trace(R * 2 - 3, 'rgba(72,58,40,0.30)');
+  trace(R * 2 - 11, 'rgba(255,252,244,0.42)');
+  ctx.restore();
+}
+
+function drawHole(path) {
+  const p = path.pts[path.len];
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  const pulse = state.balls.length && (path.len - state.balls[0].dist) < 170;
+  const t = performance.now() / 1000;
+
+  if (pulse) {
+    ctx.beginPath();
+    ctx.arc(0, 0, 34 + Math.sin(t * 8) * 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(224,59,75,' + (0.18 + Math.sin(t * 8) * 0.08) + ')';
+    ctx.fill();
+  }
+
+  // koshin halqasi
+  ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI * 2);
+  ctx.fillStyle = '#1F5E8C'; ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = '#C8912A'; ctx.stroke();
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2 + t * 0.25;
+    ctx.beginPath();
+    ctx.ellipse(Math.cos(a) * 24, Math.sin(a) * 24, 4.5, 2.4, a, 0, Math.PI * 2);
+    ctx.fillStyle = i % 2 ? '#E8E2D2' : '#C8912A';
+    ctx.fill();
+  }
+  // teshik
+  const g = ctx.createRadialGradient(0, -4, 2, 0, 0, 20);
+  g.addColorStop(0, '#000'); g.addColorStop(1, '#241C13');
+  ctx.beginPath(); ctx.arc(0, 0, 19, 0, Math.PI * 2);
+  ctx.fillStyle = g; ctx.fill();
+  ctx.restore();
+}
+
+function drawEntrance(path) {
+  const p = path.pts[path.entry];
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(p.a);
+  // tosh ravoq — mevalar shu yerdan chiqadi
+  ctx.fillStyle = 'rgba(20,31,27,0.42)';
+  ctx.beginPath(); ctx.ellipse(0, 0, 13, R + 9, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(200,145,42,0.85)';
+  ctx.beginPath(); ctx.ellipse(-8, 0, 5, R + 9, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+
+/* ---- mevalar ---- */
+function drawFruit(type, x, y, r, seed = 0) {
+  const f = FRUITS[type];
+  ctx.save();
+  ctx.translate(x, y);
+
+  // soya
+  ctx.beginPath();
+  ctx.ellipse(2, r * 0.72, r * 0.85, r * 0.34, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(20,31,27,0.18)';
+  ctx.fill();
+
+  // asosiy shar
+  const g = ctx.createRadialGradient(-r * 0.32, -r * 0.36, r * 0.15, 0, 0, r);
+  g.addColorStop(0, f.c1);
+  g.addColorStop(0.62, f.c2);
+  g.addColorStop(1, f.dark);
+  ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.fillStyle = g; ctx.fill();
+
+  ctx.save();
+  ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.clip();
+
+  if (type === 0) {                       // Tarvuz — chiziqlar
+    ctx.strokeStyle = f.dark; ctx.lineWidth = r * 0.2;
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * r * 0.44, -r);
+      ctx.quadraticCurveTo(i * r * 0.66, 0, i * r * 0.44, r);
+      ctx.stroke();
+    }
+  } else if (type === 1) {                // Qovun — to'r naqsh
+    ctx.strokeStyle = 'rgba(255,251,235,0.75)'; ctx.lineWidth = r * 0.1;
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath(); ctx.moveTo(-r, i * r * 0.42); ctx.quadraticCurveTo(0, i * r * 0.42 - r * 0.18, r, i * r * 0.42); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(i * r * 0.42, -r); ctx.quadraticCurveTo(i * r * 0.42 - r * 0.18, 0, i * r * 0.42, r); ctx.stroke();
+    }
+  } else if (type === 2) {                // Anor — tojcha va nur
+    ctx.fillStyle = f.dark;
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+      const a = -Math.PI / 2 + (i / 5) * 1.6 - 0.64;
+      ctx.moveTo(0, -r * 0.72);
+      ctx.lineTo(Math.cos(a) * r * 0.42, -r * 0.72 + Math.sin(a) * r * 0.34);
+      ctx.lineTo(0, -r * 0.34);
+    }
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = r * 0.09;
+    ctx.beginPath(); ctx.arc(-r * 0.1, r * 0.15, r * 0.5, 0.2, 2.2); ctx.stroke();
+  } else if (type === 3) {                // Uzum — g'ujum
+    ctx.fillStyle = 'rgba(255,255,255,0.16)';
+    const spots = [[-0.4,-0.2],[0.32,-0.34],[0.05,0.28],[0.44,0.3],[-0.32,0.4]];
+    for (const [sx, sy] of spots) {
+      ctx.beginPath(); ctx.arc(sx * r, sy * r, r * 0.27, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(20,20,20,0.2)'; ctx.lineWidth = r * 0.07;
+    for (const [sx, sy] of spots) {
+      ctx.beginPath(); ctx.arc(sx * r, sy * r, r * 0.27, 0, Math.PI * 2); ctx.stroke();
+    }
+  } else if (type === 4) {                // O'rik — chiziq
+    ctx.strokeStyle = 'rgba(140,60,0,0.42)'; ctx.lineWidth = r * 0.13;
+    ctx.beginPath(); ctx.moveTo(0, -r); ctx.quadraticCurveTo(-r * 0.3, 0, 0, r); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.beginPath(); ctx.arc(r * 0.35, r * 0.2, r * 0.5, 0, Math.PI * 2); ctx.fill();
+  } else {                                // Shaftoli — chiziq va barg
+    ctx.strokeStyle = 'rgba(160,40,70,0.35)'; ctx.lineWidth = r * 0.13;
+    ctx.beginPath(); ctx.moveTo(0, -r); ctx.quadraticCurveTo(r * 0.28, 0, 0, r); ctx.stroke();
+    ctx.fillStyle = '#4FA83D';
+    ctx.beginPath(); ctx.ellipse(r * 0.34, -r * 0.62, r * 0.3, r * 0.14, -0.6, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+
+  // yorug'lik
+  const hl = ctx.createRadialGradient(-r * 0.34, -r * 0.42, 0, -r * 0.34, -r * 0.42, r * 0.62);
+  hl.addColorStop(0, 'rgba(255,255,255,0.6)');
+  hl.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.fillStyle = hl; ctx.fill();
+
+  ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(20,31,27,0.22)'; ctx.lineWidth = 1.2; ctx.stroke();
+  ctx.restore();
+}
+
+function drawShooter() {
+  const s = state.shooter;
+  const a = Math.atan2(state.aim.y - s.y, state.aim.x - s.x);
+  const rec = s.recoil * 6;
+
+  // nishon chizig'i
+  ctx.save();
+  ctx.setLineDash([5, 9]);
+  ctx.strokeStyle = 'rgba(20,83,45,0.35)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(s.x + Math.cos(a) * 34, s.y + Math.sin(a) * 34);
+  ctx.lineTo(s.x + Math.cos(a) * 190, s.y + Math.sin(a) * 190);
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.save();
+  ctx.translate(s.x, s.y);
+
+  // lagan (sopol tovoq)
+  ctx.beginPath(); ctx.arc(0, 4, 34, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(20,31,27,0.16)'; ctx.fill();
+
+  const g = ctx.createRadialGradient(-8, -10, 4, 0, 0, 34);
+  g.addColorStop(0, '#FFFDF6'); g.addColorStop(1, '#DCD2BC');
+  ctx.beginPath(); ctx.arc(0, 0, 32, 0, Math.PI * 2);
+  ctx.fillStyle = g; ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = '#1F5E8C'; ctx.stroke();
+
+  // koshin naqshi
+  for (let i = 0; i < 10; i++) {
+    const pa = (i / 10) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.ellipse(Math.cos(pa) * 25, Math.sin(pa) * 25, 4, 2, pa, 0, Math.PI * 2);
+    ctx.fillStyle = i % 2 ? '#1F5E8C' : '#C8912A';
+    ctx.fill();
+  }
+
+  // nay (otish trubkasi)
+  ctx.save();
+  ctx.rotate(a);
+  ctx.translate(-rec, 0);
+  ctx.beginPath();
+  ctx.moveTo(6, -13); ctx.lineTo(34, -9); ctx.lineTo(34, 9); ctx.lineTo(6, 13);
+  ctx.closePath();
+  ctx.fillStyle = '#14532D'; ctx.fill();
+  ctx.strokeStyle = '#C8912A'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.restore();
+
+  ctx.restore();
+
+  // navbatdagi meva (kichik)
+  drawFruit(state.next, s.x - Math.cos(a) * 40, s.y - Math.sin(a) * 40, 11);
+  // otiladigan meva
+  drawFruit(state.current, s.x - Math.cos(a) * rec, s.y - Math.sin(a) * rec, R);
+}
+
+function render() {
+  ctx.save();
+  if (state.shake > 0) {
+    ctx.translate((Math.random() - 0.5) * state.shake, (Math.random() - 0.5) * state.shake);
+  }
+  ctx.drawImage(bg, 0, 0);
+
+  if (state.path) {
+    drawTrack(state.path);
+    drawEntrance(state.path);
+    drawHole(state.path);
+
+    // xavf zonasi
+    if (state.balls.length) {
+      const left = state.path.len - state.balls[0].dist;
+      if (left < 220) {
+        ctx.fillStyle = 'rgba(224,59,75,' + (0.05 + (1 - left / 220) * 0.12) + ')';
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
+    for (let i = state.balls.length - 1; i >= 0; i--) {
+      const b = state.balls[i];
+      const p = posAt(state.path, b.dist);
+      drawFruit(b.type, p.x, p.y, R * (1 + b.pop * 0.18));
+    }
+
+    if (state.shot) drawFruit(state.shot.type, state.shot.x, state.shot.y, R);
+    drawShooter();
+  }
+
+  // zarralar
+  for (const p of state.particles) {
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.c; ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // ochko yozuvlari
+  for (const q of state.popups) {
+    ctx.globalAlpha = Math.max(0, Math.min(1, q.life));
+    ctx.font = (q.big ? '700 26px ' : '600 20px ') + "'Fraunces', Georgia, serif";
+    ctx.textAlign = 'center';
+    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(250,246,236,0.9)';
+    ctx.strokeText(q.text, q.x, q.y);
+    ctx.fillStyle = q.big ? '#C8912A' : '#14532D';
+    ctx.fillText(q.text, q.x, q.y);
+  }
+  ctx.globalAlpha = 1;
+
+  if (state.flash > 0) {
+    ctx.fillStyle = 'rgba(255,255,255,' + (state.flash * 0.35) + ')';
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // oxirgi mevalar ogohlantirishi
+  if (state.mode === 'play' && state.remaining === 0 && state.balls.length) {
+    ctx.font = "600 15px 'Instrument Sans', system-ui, sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(20,83,45,0.6)';
+    ctx.fillText("So'nggi mevalar!", W / 2, H - 22);
+  }
+
+  ctx.restore();
+}
+
+/* ============================ Sikl ============================ */
+let last = performance.now();
+function loop(now) {
+  let dt = (now - last) / 1000;
+  last = now;
+  if (dt > 0.05) dt = 0.05;
+
+  if (state.mode === 'play') {
+    updateChain(dt);
+    updateShot(dt);
+    if (state.balls.length === 0 && state.remaining === 0 && !state.shot) levelClear();
+  }
+  if (state.mode !== 'start') updateFx(dt);
+  render();
+  requestAnimationFrame(loop);
+}
+
+/* ============================ O'yin holatlari ============================ */
+function levelClear() {
+  state.mode = 'clear';
+  const bonus = 500 + state.levelNum * 250;
+  state.score += bonus;
+  saveBest();
+  updateHud();
+  document.getElementById('clear-title').textContent = state.cfg.name + " tozalandi";
+  document.getElementById('clear-text').textContent =
+    `Bosqich bonusi +${bonus}. Umumiy ochko: ${state.score}.`;
+  show('ov-clear');
+  sfx.clear();
+}
+
+function gameOver() {
+  state.mode = 'over';
+  const isRecord = state.score > state.best;
+  saveBest();
+  updateHud();
+  document.getElementById('over-text').textContent = isRecord
+    ? `Yangi rekord: ${state.score} ochko! ${state.levelNum}-bosqichgacha yetdingiz.`
+    : `${state.score} ochko, ${state.levelNum}-bosqich. Rekord: ${state.best}.`;
+  show('ov-over');
+  sfx.over();
+}
+
+function saveBest() {
+  if (state.score > state.best) {
+    state.best = state.score;
+    try { localStorage.setItem('qovunzuma.best', String(state.best)); } catch (e) {}
+  }
+}
+
+function updateHud() {
+  document.getElementById('hud-score').textContent = state.score;
+  document.getElementById('hud-level').textContent = state.levelNum;
+  document.getElementById('hud-left').textContent = state.remaining + state.balls.length;
+  document.getElementById('hud-best').textContent = state.best;
+}
+
+/* ============================ UI ============================ */
+const overlays = ['ov-start', 'ov-pause', 'ov-clear', 'ov-over'];
+function show(id) { overlays.forEach(o => document.getElementById(o).hidden = (o !== id)); }
+function hideAll() { overlays.forEach(o => document.getElementById(o).hidden = true); }
+
+document.getElementById('btn-start').onclick = () => { state.score = 0; hideAll(); startLevel(1); };
+document.getElementById('btn-again').onclick = () => { state.score = 0; hideAll(); startLevel(1); };
+document.getElementById('btn-next').onclick = () => { hideAll(); startLevel(state.levelNum + 1); };
+document.getElementById('btn-resume').onclick = () => { hideAll(); state.mode = 'play'; last = performance.now(); };
+document.getElementById('btn-quit').onclick = () => { state.score = 0; state.mode = 'start'; show('ov-start'); };
+
+const btnPause = document.getElementById('btn-pause');
+btnPause.onclick = togglePause;
+function togglePause() {
+  if (state.mode === 'play') { state.mode = 'pause'; show('ov-pause'); }
+  else if (state.mode === 'pause') { hideAll(); state.mode = 'play'; last = performance.now(); }
+}
+
+const btnSound = document.getElementById('btn-sound');
+btnSound.onclick = () => { sound = !sound; btnSound.textContent = sound ? '🔊' : '🔇'; };
+
+// meva ro'yxati (start ekranida)
+(function legend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = FRUITS.map(f =>
+    `<div><span class="swatch" style="background:radial-gradient(circle at 32% 30%, ${f.c1}, ${f.c2})"></span>${f.name}</div>`
+  ).join('');
+})();
+
+/* ---- kirish ---- */
+function toLocal(clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (clientX - rect.left) * (W / rect.width),
+    y: (clientY - rect.top) * (H / rect.height),
+  };
+}
+
+canvas.addEventListener('mousemove', e => {
+  const p = toLocal(e.clientX, e.clientY);
+  state.aim.x = p.x; state.aim.y = p.y;
+});
+canvas.addEventListener('mousedown', e => {
+  if (e.button === 2) { swapBalls(); return; }
+  const p = toLocal(e.clientX, e.clientY);
+  state.aim.x = p.x; state.aim.y = p.y;
+  shoot();
+});
+canvas.addEventListener('contextmenu', e => { e.preventDefault(); swapBalls(); });
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.changedTouches[0];
+  const p = toLocal(t.clientX, t.clientY);
+  state.aim.x = p.x; state.aim.y = p.y;
+  shoot();
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const t = e.changedTouches[0];
+  const p = toLocal(t.clientX, t.clientY);
+  state.aim.x = p.x; state.aim.y = p.y;
+}, { passive: false });
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); swapBalls(); }
+  else if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') togglePause();
+  else if (e.key === 'm' || e.key === 'M') btnSound.click();
+  else if (e.key === 'Enter' && state.mode === 'start') document.getElementById('btn-start').click();
+});
+
+updateHud();
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
